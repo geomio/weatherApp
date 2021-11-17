@@ -2,10 +2,30 @@
 <html lang="en-US">
 
 <head>
-  <title>Weather app</title>
+  <title>Weather</title>
 </head>
 
 <body>
+  <div class="container">
+    <h1>Get Weather!</h1>
+    <label for="location">Enter a location:</label>
+    <input id="location" type="text">
+    <h1> or enter by gps coordinates. leave city blank if searching this</h1>
+    <label for="latitude">Latitude</label>
+    <input id="latitude" type="number">
+    <label for="longitude">Longitude</label>
+    <input id="longitude" type="number">
+    <button class="btn-success" id="weatherLocation">Temperature and Humidity</button>
+    <div class="showErrors"></div>
+    <div class="showHumidity"></div>
+    <div class="showTemp"></div>
+    <div class="showNewTemp"></div>
+    <label for="newSearch">Enter something</label>
+    <button class="btn-success" id="weatherNew"></button>
+    <div class="showNew"></div>
+  </div>
 </body>
+
+</html>
 
 </html>

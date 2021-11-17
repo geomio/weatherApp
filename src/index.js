@@ -3,48 +3,46 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 
-//Weather api info below
-// {
-//   "coord": {
-//       "lon": -70.2549,
-//       "lat": 43.661
-//   },
-//   "weather": [
-//       {
-//           "id": 800,
-//           "main": "Clear",
-//           "description": "clear sky",
-//           "icon": "01d"
-//       }
-//   ],
-//   "base": "stations",
-//   "main": {
-//       "temp": 295.1,
-//       "feels_like": 294.97,
-//       "temp_min": 291.93,
-//       "temp_max": 297.82,
-//       "pressure": 1025,
-//       "humidity": 62
-//   },
-//   "visibility": 10000,
-//   "wind": {
-//       "speed": 0.45,
-//       "deg": 214,
-//       "gust": 3.13
-//   },
-//   "clouds": {
-//       "all": 1
-//   },
-//   "dt": 1633627867,
-//   "sys": {
-//       "type": 2,
-//       "id": 2002830,
-//       "country": "US",
-//       "sunrise": 1633603540,
-//       "sunset": 1633644695
-//   },
-//   "timezone": -14400,
-//   "id": 4975802,
-//   "name": "Portland",
-//   "cod": 200
-// }
+$(document).ready(function () {
+  $('#weatherLocation').click(function () {
+    const city = $('#location').val();
+    const lon = $('#longitude').val();
+    const lat = $('#latitude').val();
+    $('#location').val("");
+
+    let promise = new Promise(function (resolve, reject) {
+      let request = new XMLHttpRequest();
+      let url;
+      if (city) {
+        url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`
+      } else {
+        url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.API_KEY}`
+      }
+
+      request.onload = function () {
+        if (this.status === 200) {
+          resolve(request.response);
+        } else {
+          reject(request.response)
+        }
+      }
+
+      request.open("GET", url, true);
+      request.send();
+    });
+
+    promise.then(function (response) {
+      const body = JSON.parse(response);
+      $('.showHumidity').text(`The humidity in ${city} is ${response.main.humidity}%`);
+      $('.showTemp').text(`The temperature in Kelvins is ${response.main.temp} degrees.`);
+      let fahrenheit = (response.main.temp - 273.15) * (9 / 5) + 32
+      $('.showNewTemp').text('The temperature in Fahrenheit is:' + fahrenheit);
+      $('.showErrors').text("");
+    }, function (error) {
+      $('.showErrors').text(`There was an error processing your request: ${error}`);
+      $('.showHumidity').text("");
+      $('.showTemp').text("");
+    });
+  });
+});
+
