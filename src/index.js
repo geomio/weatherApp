@@ -2,35 +2,20 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
+import WeatherService from './weather-service.js'
+
+function clearFields() {
+  $('#location').val("");
+  $('.showErrors').text("");
+  $('.showHumidity').text("");
+  $('.showTemp').text("");
+}
 
 $(document).ready(function () {
   $('#weatherLocation').click(function () {
-    const city = $('#location').val();
-    const lon = $('#longitude').val();
-    const lat = $('#latitude').val();
-    $('#location').val("");
-
-    let promise = new Promise(function (resolve, reject) {
-      let request = new XMLHttpRequest();
-      let url;
-      if (city) {
-        url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`
-      } else {
-        url = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${process.env.API_KEY}`
-      }
-
-      request.onload = function () {
-        if (this.status === 200) {
-          resolve(request.response);
-        } else {
-          reject(request.response)
-        }
-      }
-
-      request.open("GET", url, true);
-      request.send();
-    });
-
+    let city = $('#location').val();
+    clearFields();
+    let promise = WeatherService.getWeather(city);
     promise.then(function (response) {
       const body = JSON.parse(response);
       $('.showHumidity').text(`The humidity in ${city} is ${body.main.humidity}%`);
