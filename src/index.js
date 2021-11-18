@@ -33,9 +33,9 @@ $(document).ready(function () {
 
     promise.then(function (response) {
       const body = JSON.parse(response);
-      $('.showHumidity').text(`The humidity in ${city} is ${response.main.humidity}%`);
-      $('.showTemp').text(`The temperature in Kelvins is ${response.main.temp} degrees.`);
-      let fahrenheit = (response.main.temp - 273.15) * (9 / 5) + 32
+      $('.showHumidity').text(`The humidity in ${city} is ${body.main.humidity}%`);
+      $('.showTemp').text(`The temperature in Kelvins is ${body.main.temp} degrees.`);
+      let fahrenheit = (body.main.temp - 273.15) * (9 / 5) + 32
       $('.showNewTemp').text('The temperature in Fahrenheit is:' + fahrenheit);
       $('.showErrors').text("");
     }, function (error) {
